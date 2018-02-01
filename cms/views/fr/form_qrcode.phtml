@@ -1,0 +1,169 @@
+<?php
+
+/**
+ *
+ * @copyright  2010-2013 frasq.org
+ * @version    2
+ * @link       http://www.frasq.org
+ *
+ * Edité par CORLER Damien
+ */
+?>
+
+<script>
+    $(document).ready(function () {
+
+        $('.minicolors').each(function () {
+
+            $(this).minicolors({
+                control: $(this).attr('data-control') || 'hue',
+                defaultValue: $(this).attr('data-defaultValue') || '',
+                format: $(this).attr('data-format') || 'hex',
+                keywords: $(this).attr('data-keywords') || '',
+                inline: $(this).attr('data-inline') === 'true',
+                letterCase: $(this).attr('data-letterCase') || 'lowercase',
+                opacity: $(this).attr('data-opacity'),
+                position: $(this).attr('data-position') || 'bottom left',
+                swatches: $(this).attr('data-swatches') ? $(this).attr('data-swatches').split('|') : [],
+                change: function (hex, opacity) {
+                    let log;
+                    try {
+                        log = hex ? hex : 'transparent';
+                        if (opacity) log += ', ' + opacity;
+                        console.log(log);
+                    } catch (e) {
+                    }
+                },
+                theme: 'default'
+            });
+
+        });
+
+    });
+</script>
+
+<?php if ($qrcode_ready): ?>
+    <img class="animation-target" src="<?= $base_path . $url_qrcode; ?>">
+<?php endif; ?>
+
+<div class="form" id="mailme_form">
+    <form action="" method="post">
+        <input type="hidden" name="qrcode_token" value="<?php echo $token; ?>"/>
+        <div class="fields">
+            <p><?= (isset($credit) && $credit !== null) ? "Vos crédits : " . $credit : ""; ?></p>
+            <p class="label">URL</p>
+            <p class="input"><input type="text" name="qrcode_url_target" id="qrcode_url_target" size="50"
+                                    maxlength="255"
+                                    title="Url"
+                                    value="<?php echo htmlspecialchars($url_target, ENT_COMPAT, 'UTF-8'); ?>"/></p>
+            <p class="info">Exemple : http://www.qrmii.com/</p>
+
+            <div class="form_group">
+                <label for="text-field">Couleur
+                    <input type="text" id="qrcode_color_1" name="qrcode_color_1" class="minicolors"
+                           value="<?= (isset($color_1)) ? htmlspecialchars($color_1, ENT_COMPAT, 'UTF-8') : '#000000'; ?>"
+                           data-letterCase="uppercase"
+                           data-defaultValue="#000000">
+                </label>
+                <label for="text-field">Fond
+                    <br>
+                    <input type="text" id="qrcode_color_2" name="qrcode_color_2" class="minicolors"
+                           value="<?= (isset($color_2)) ? htmlspecialchars($color_2, ENT_COMPAT, 'UTF-8') : '#FFFFFF'; ?>"
+                           data-letterCase="uppercase"
+                           data-defaultValue="#FFFFFF">
+                </label>
+            </div>
+
+            <div class="form_group">
+                <label>Qualité
+                    <select id="qrcode_quality" name="qrcode_quality">
+                        <option value="L">L</option>
+                        <option value="M" selected>M</option>
+                        <option value="Q">Q</option>
+                        <option value="H" selected>H</option>
+                    </select>
+                </label>
+
+                <label>Taille
+                    <select id="qrcode_size" name="qrcode_size">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10" selected>10</option>
+                    </select>
+                </label>
+            </div>
+
+            <?php if ($with_captcha): ?>
+                <p class="input">
+                    <img class="captcha" src="<?php echo $base_path; ?>/captcha" alt="" title="Verification code"/>
+                    &nbsp;:&nbsp;
+                    <input type="text" name="qrcode_code" id="qrcode_code" size="4" maxlength="4" title="4 letters"
+                           onkeypress="return submitonenter(event, 'qrcode_generate_send')" value=""/>
+                </p>
+            <?php endif; ?>
+            <p class="submit">
+                <button type="submit" name="qrcode_generate_send" id="qrcode_generate_send">Générer</button>
+            </p>
+        </div>
+    </form>
+
+    <?php if ($errors):
+        extract($errors);
+        ?>
+        <div class="errors">
+            <?php if ($missing_code): ?>
+                <p>Entrer le code de vérification.</p>
+            <?php elseif ($bad_code): ?>
+                <p>Le code de vérification est incorrecte.</p>
+            <?php endif; ?>
+            <?php if ($missing_target_url): ?>
+                <p>Vous n'avez pas saisie d'URL.</p>
+            <?php elseif ($bad_target_url): ?>
+                <p>L'URL est invalide.</p>
+            <?php endif; ?>
+            <?php if ($missing_size): ?>
+                <p>Le paramètre de la taille est manquant.</p>
+            <?php endif; ?>
+            <?php if ($missing_quality): ?>
+                <p>Le paramètre de la qualité est manquant.</p>
+            <?php endif; ?>
+            <?php if ($missing_color_1): ?>
+                <p>Le paramètre de la couleur 1 est manquant.</p>
+            <?php endif; ?>
+            <?php if ($missing_color_2): ?>
+                <p>Le paramètre de la couleur 2 est manquant.</p>
+            <?php endif; ?>
+            <?php if ($bad_color_1): ?>
+                <p>Le paramètre de la couleur 1 est malformé.</p>
+            <?php endif; ?>
+            <?php if ($bad_color_2): ?>
+                <p>Le paramètre de la couleur 2 est malformé</p>
+            <?php endif; ?>
+            <?php if ($internal_error): ?>
+                <p>Une erreur système est survenue.</p>
+            <?php endif; ?>
+            <?php if ($not_enough_credit): ?>
+                <p>Vous n'avez pas assez de crédit pour bénéficier des fonctionnalités premium.</p>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+    <?php if ($infos):
+        extract($infos);
+        ?>
+        <div class="infos">
+            <?php if ($qrcode_ready): ?>
+                <p>Le QRCode à été généré avec succès !</p>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+</div>
+<div class="debug">
+    <?= (isset($debug)) ? $debug : ""; ?>
+</div>

@@ -1,0 +1,22 @@
+<?php
+
+/**
+ *
+ * @copyright  2010-2013 frasq.org
+ * @version    2
+ * @link       http://www.frasq.org
+ */
+?>
+<h3><?php echo htmlspecialchars($node_title, ENT_COMPAT, 'UTF-8'); ?></h3>
+<?php if ($node_abstract): ?>
+    <h5>Abstract</h5>
+    <p><?php echo htmlspecialchars($node_abstract, ENT_COMPAT, 'UTF-8'); ?></p>
+<?php endif; ?>
+<?php if ($node_cloud): ?>
+    <h6>Cloud</h6>
+    <p class="smaller"><?php echo htmlspecialchars($node_cloud, ENT_COMPAT, 'UTF-8'); ?></p>
+<?php endif; ?>
+<?php if ($node_contents): ?>
+    <h4>Contents</h4>
+    <?php echo $node_contents; ?>
+<?php endif; ?>

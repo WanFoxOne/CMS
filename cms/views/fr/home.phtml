@@ -1,0 +1,16 @@
+<?php
+
+/**
+ *
+ * @copyright  2010-2016 frasq.org
+ * @version    2
+ * @link       http://www.frasq.org
+ */
+?>
+<h3>Bienvenue</h3>
+<?php if (!empty($username)): ?>
+<p class="right"><img src="<?php echo $base_path; ?>/avatars/<?php echo $username; ?>.png" title="<?php echo $username; ?>" /></p>
+<?php endif; ?>
+<p>PHP <?php echo phpversion(); ?><br />
+MySQL <?php echo db_version(); ?><br />
+<?php echo php_uname('s'); ?>&nbsp;<?php echo php_uname('r'); ?></p>

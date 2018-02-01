@@ -1,0 +1,21 @@
+<?php
+
+/**
+ *
+ * @copyright  2010 frasq.org
+ * @version    1
+ * @link       http://www.frasq.org
+ */
+?>
+<?php
+foreach ($contents as $c) {
+	switch($c['type']) {
+		case 'text':
+			$text_content = $c['text'];
+			echo $text_content, PHP_EOL;
+			break;
+		default:
+			break;
+	}
+}
+?>
